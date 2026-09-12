@@ -7,7 +7,7 @@ stopwatch/countdown timer** over any app running on the tablet (YouTube,
 Netflix, whatever), with no subscription and no modification to Peloton's
 software.
 
-![What you get](docs/overlay.png)
+![What you get](docs/ui.png)
 
 **The short version:** the Tread's tablet is a normal Android 10 device. The
 services that read the treadmill's sensors are ordinary Android services, and
