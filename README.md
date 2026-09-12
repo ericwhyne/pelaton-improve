@@ -273,8 +273,9 @@ leave this package alone.
 
 - No sound in your video apps? Check the media volume stream — it ships at
   zero: `adb shell media volume --stream 3 --set 10`.
-- After a tablet reboot, everything sideloaded is still there; only the
-  overlay needs a manual start (see above).
+- Everything survives reboots and power loss: sideloaded apps, the default
+  launcher, permission grants, and disabled-package states all live on the
+  data partition, and the overlay auto-starts itself at boot.
 
 ## Lessons learned
 

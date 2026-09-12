@@ -20,6 +20,8 @@ app. Sideloaded with `adb`; no root, no changes to Peloton software.
 - Chevron (▲) on the pill's right end opens/closes the control panel
   (mode switch, time adjust, start/pause/reset).
 - Mode and countdown setting survive restarts.
+- Auto-starts after reboot/power loss (once the overlay permission has been
+  granted and the app started once).
 
 ## Requirements
 
@@ -58,8 +60,9 @@ The launcher activity just checks the overlay permission, starts the
 foreground service, and exits. If the permission is missing it opens the
 system settings page for it instead.
 
-There is intentionally no start-on-boot receiver. After a tablet reboot,
-run the `am start` line again (or tap the app icon).
+The app registers a `BOOT_COMPLETED` receiver, so after the first manual
+start it comes back on its own following any reboot or power loss (as long
+as the overlay permission is granted).
 
 If `adb install` fails with **"not enough space"**: the data partition is
 probably nearly full (these tablets ship with only 4 GB). Reclaim app cache
