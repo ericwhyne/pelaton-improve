@@ -9,6 +9,66 @@ software.
 
 ![What you get](docs/ui.png)
 
+# The Legal Stuff First
+
+## Legal and safety notice
+
+This project is an independent, unofficial experiment by a Peloton Tread
+owner. It is not affiliated with, endorsed by, sponsored by, or approved
+by Peloton Interactive, Inc. or any of its affiliates. “Peloton,” “Tread,”
+and related names are trademarks of their owners and are used here only
+to identify the hardware this code talks to.
+
+### What this is
+- Personal, non-commercial documentation and original client code.
+- Read-only use of Android services the tablet already exports.
+- No modification of Peloton firmware, APKs, or safety-critical packages
+  is required for the overlay to work.
+
+### What this is not
+- Not a Peloton product, accessory, or supported configuration.
+- Not a circumvention kit, crack, or patched Peloton application.
+- Not permission to copy, distribute, or publish Peloton software,
+  decompiled source, APKs, assets, or class libraries.
+- Not advice that you should disable updates, change lock/safety
+  packages, or alter belt control.
+
+### Your machine, your risk
+Sideloading software, changing the launcher, installing third-party apps,
+or disabling vendor packages can void the manufacturer warranty and any
+extended protection plan, may violate Peloton’s Terms of Service, and may
+leave the tablet without security or firmware updates. Do not do anything
+that can affect motion, emergency stop, lock, or belt-arming behavior.
+If a step in these notes would change how the treadmill moves or how it
+is unlocked, skip that step.
+
+Treadmills can cause serious injury. This software only displays numbers
+and a timer. It does not make the machine safer. You are responsible for
+how you use the equipment.
+
+### License of *this* repo only
+The original files in this repository (documentation and the overlay-app
+sources authored here) are provided “AS IS,” without warranty of any
+kind, express or implied, including merchantability, fitness for a
+particular purpose, and non-infringement. In no event will the author be
+liable for any claim, damages, or other liability arising from the use of
+this material, including account termination, denied warranty service,
+device damage, data loss, or personal injury.
+
+You may use, copy, and modify the original files in this repo for
+personal, non-commercial purposes on hardware you own. You may not use
+this project to build or sell a competing connected-fitness product, to
+redistribute Peloton software, or to imply Peloton approval.
+
+### If you are Peloton
+The overlay binds an exported, ungated hardware-bridge service and polls
+two read-only getters. Vendor code was inspected locally for
+interoperability and is not in this repository. If any file here is
+yours and should not be public, open an issue or email the address on
+the GitHub profile and it will be removed promptly.
+
+# How to
+
 **The short version:** the Tread's tablet is a normal Android 10 device. The
 services that read the treadmill's sensors are ordinary Android services, and
 the ones you need are exported with no permission gate. You can bind to them
