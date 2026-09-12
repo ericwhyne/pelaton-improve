@@ -133,6 +133,89 @@ adb shell appops set net.whyne.treadoverlay SYSTEM_ALERT_WINDOW allow
 adb shell am start -n net.whyne.treadoverlay/.MainActivity
 ```
 
+## Loading streaming apps (YouTube, Netflix, etc.)
+
+The tablet is a normal Android 10 device underneath, so it can run normal
+Android apps. It ships without Google Play, so you sideload a launcher and
+app stores over adb. The overlay floats above all of it.
+
+### 1. Install a real launcher
+
+The stock UI is a kiosk. Install a launcher so the home button gives you a
+normal Android desktop; the Peloton app stays installed and can still be
+launched like any other app.
+
+```bash
+adb install lawnchair.apk   # https://lawnchair.app (or F-Droid)
+adb shell cmd package set-home-activity app.lawnchair/app.lawnchair.LawnchairLauncher
+```
+
+### 2. Install app stores
+
+- **[F-Droid](https://f-droid.org)** — open-source app catalog. `adb install fdroid.apk`.
+- **[Aurora Store](https://auroraoss.com)** — a client for the Google Play
+  catalog that works with anonymous sessions, so the tablet needs no Google
+  account and no Google services. `adb install aurorastore.apk`.
+
+From there you can install apps on the tablet itself. **Netflix** installs
+straight from Aurora Store and works.
+
+Note: apps that hard-require Google Play Services won't run (there is none
+on this tablet). Netflix and most video apps don't.
+
+### 3. YouTube
+
+Two options, both without Google services:
+
+- **[NewPipe](https://newpipe.net)** (via F-Droid) — lightweight YouTube
+  client, no account, no ads, works out of the box. The easy path.
+- **ReVanced YouTube + microG** — the full official YouTube app experience.
+  Use the [ReVanced CLI](https://github.com/ReVanced/revanced-cli) on a
+  computer to patch an official YouTube APK, making sure the **GmsCore
+  support** patch is included (it retargets the app from Google Play
+  Services to microG and renames the package). Then install both the
+  patched YouTube and [ReVanced GmsCore](https://github.com/ReVanced/GmsCore)
+  (microG):
+
+  ```bash
+  adb install revanced-gmscore.apk
+  adb install youtube-revanced.apk
+  ```
+
+  Check the patch compatibility list for which YouTube version to patch;
+  it must also run on Android 10.
+
+### 4. Keep OTA updates from undoing your work (optional)
+
+Peloton's updaters will happily pull a new image over your changes. They can
+be disabled per-user with adb (reversible with `pm enable`):
+
+```bash
+adb shell pm disable-user --user 0 com.peloton.updater
+adb shell pm disable-user --user 0 com.onepeloton.OTAService
+adb shell pm disable-user --user 0 com.onepeloton.bgupdater
+adb shell pm disable-user --user 0 com.onepeloton.fwupdateservice
+```
+
+Trade-off: you're also freezing security and firmware fixes; re-enable
+temporarily if you ever want to take an update on your own schedule.
+
+### ⚠️ Do not disable `com.onepeloton.sensorstateindicator`
+
+It looks like it just draws the tread-lock screen, but it is also the
+unlock mechanism that **arms the belt controller**. With it disabled, the
+physical speed/incline controls stop working (they flash red). If you make
+this mistake: `adb shell pm enable com.onepeloton.sensorstateindicator` and
+reboot the tablet. The lock passcode is inseparable from working controls;
+leave this package alone.
+
+### Misc
+
+- No sound in your video apps? Check the media volume stream — it ships at
+  zero: `adb shell media volume --stream 3 --set 10`.
+- After a tablet reboot, everything sideloaded is still there; only the
+  overlay needs a manual start (see above).
+
 ## Lessons learned
 
 1. **Read-only beats clever.** The synchronous getters (poll speed/incline)
